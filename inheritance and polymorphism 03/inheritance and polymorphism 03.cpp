@@ -2,18 +2,16 @@
 #include <Windows.h>
 
 class Figure {
-private:
-    int sides_count;
-
 protected:
-    Figure(int sides) : sides_count(sides) {}
-
+    int sides_count;
+    std::string name;
+    
 public:
-    Figure() : Figure(0) {}
+    Figure() : sides_count(0), name("Фигура") {}
 
     virtual void print_info() {
 
-        std::cout << "Фигура:" << std::endl;
+        std::cout << name << std::endl;
 
         if (check()) {
             std::cout << "Правильная" << std::endl;
@@ -21,23 +19,24 @@ public:
         else {
             std::cout << "Неправильная" << std::endl;
         };
-
-        std::cout << "Количество сторон:"<< " " << sides_count << std::endl;
-
+        std::cout << "Количество сторон: " << sides_count << std::endl;
     };
-    virtual bool check() {
+
+    bool check() {
         return (sides_count==0);
     }
 };
 
-class Triangle {
+class Triangle : Figure {
 protected:
     int a, b, c;
     int A, B, C;
+    std::string name;
 
 public:
-    Triangle(int a, int b, int c, int A, int B, int C) : a(a), b(b), c(c), A(A), B(B), C(C) {}
+    Triangle() :a(10), b(20), c(30), A(50), B(60), C(70), name("Треугольник") {}
 
+    std::string get_name() { return name; }
     int get_a() { return a; }
     int get_b() { return b; }
     int get_c() { return c; }
@@ -45,7 +44,8 @@ public:
     int get_B() { return B; }
     int get_C() { return C; }
 
-    virtual void print_info(Triangle* shape) {
+    void print_info(Triangle* shape) {
+        std::cout << name << std::endl;
 
         if (check()) {
             std::cout << "Правильная" << std::endl;
@@ -65,75 +65,49 @@ public:
 
 class RightTriangle : public Triangle {
 public:
-    RightTriangle(int a, int b, int c, int A, int B) : Triangle(a, b, c, A, B, 90) {}
-
-    void  print_info(Triangle* shape) override {
-        if (check()) {
-            std::cout << "Правильная" << std::endl;
-        }
-        else {
-            std::cout << "Неправильная" << std::endl;
-        }
-        std::cout << "Количество сторон: 3" << std::endl;
-        std::cout << "Стороны: a=" << a << " b=" << b << " c=" << c << std::endl;
-        std::cout << "Углы: A=" << A << " B=" << B << " C=" << C << std::endl;
-    }
-
-    virtual bool check() {
+    RightTriangle() {
+        C = 90;
+        name = "Прямоугольный треугольник:";
+    }   
+   bool check()override {
         return C == 90;
     }
   };
 
 class IsoscelesTriangle : public Triangle {
 public:
-    IsoscelesTriangle(int a, int c, int A, int B) : Triangle(a, c, a, A, B, A) {}
-
-    void  print_info(Triangle* shape) override {
-        if (check()) {
-            std::cout << "Правильная" << std::endl;
-        }
-        else {
-            std::cout << "Неправильная" << std::endl;
-        }
-        std::cout << "Количество сторон: 3" << std::endl;
-        std::cout << "Стороны: a=" << a << " b=" << b << " c=" << c << std::endl;
-        std::cout << "Углы: A=" << A << " B=" << B << " C=" << C << std::endl;
+    IsoscelesTriangle() {
+        c = 10; C = 50;
+        name = "Равнобедренный треугольник:";
     }
 
-    virtual bool check() {
+    bool check() override {
         return a == c && c == b && b == a;
     }
 };
 
 class EquilateralTriangle : public Triangle {
 public:
-    EquilateralTriangle(int a) : Triangle(a, a, a, 60, 60, 60) {}
-
-    void  print_info(Triangle* shape) override {
-        if (check()) {
-            std::cout << "Правильная" << std::endl;
-        }
-        else {
-            std::cout << "Неправильная" << std::endl;
-        }
-        std::cout << "Количество сторон: 3" << std::endl;
-        std::cout << "Стороны: a=" << a << " b=" << b << " c=" << c << std::endl;
-        std::cout << "Углы: A=" << A << " B=" << B << " C=" << C << std::endl;
+    EquilateralTriangle() {
+        a = 30; b = 30;
+        A = 60; B = 60; C = 60;
+        name = "Равносторонний треугольник:";
     }
 
-    virtual bool check() {
+    bool check() override {
         return a == c && a == b && A == 60 && B == 60 && C == 60;
     }
 };
 
-
-class Quadrilateral {
+class Quadrilateral{
 protected:
     int a, b, c, d;
     int A, B, C, D;
+    std::string name;
 public:
-    Quadrilateral(int a, int b, int c, int d, int A, int B, int C, int D) : a(a), b(b), c(c), d(d), A(A), B(B), C(C), D(D) {}
+    Quadrilateral() : a(10), b(20), c(30), d(40), A(50), B(60), C(70), D(80), name("Четырехугольник:") {}
 
+    std::string get_name() { return name; }
     int get_a() { return a; }
     int get_b() { return b; }
     int get_c() { return c; }
@@ -144,6 +118,8 @@ public:
     int get_D() { return D; }
 
     virtual void print_info(Quadrilateral* shape) {
+
+        std::cout << name << std::endl;
 
         if (check()) {
             std::cout << "Правильная" << std::endl;
@@ -159,101 +135,54 @@ public:
     virtual bool check() {
         return ((A + B + C + D) == 360);
     }
-
 };
 
 class Parallelogram : public Quadrilateral {
 public:
-    Parallelogram(int a, int b, int A, int B) : Quadrilateral(a, b, a, b, A, B, A, B) {}
-
-    void print_info(Quadrilateral* shape) override {      
-
-        if (check()) {
-            std::cout << "Правильная" << std::endl;
-        }
-        else {
-            std::cout << "Неправильная" << std::endl;
-        }
-        std::cout << "Количество сторон: 4" << std::endl;
-        std::cout << "Стороны: a=" << a << " b=" << b << " c=" << c << " d=" << d << std::endl;
-        std::cout << "Углы: A=" << A << " B=" << B << " C=" << C << " D=" << D << std::endl;
-    }
+    Parallelogram() {
+        a = 20; b = 30; c = 20; d = 30;
+        A = 30; B = 40; C = 30; D = 40;
+        name = "Параллелограмм:";
+    }  
 
      bool check() override {
      return a == c && b == c && A == C && B == D;
       };
-
-
 };
 
 class Rectangl : public Quadrilateral {
 public:
-    Rectangl(int a, int b) : Quadrilateral(a, b, a, b, 90, 90, 90, 90) {}
-
-    void print_info(Quadrilateral* shape) override {
-       
-        if (check()) {
-            std::cout << "Правильная" << std::endl;
-        }
-        else {
-            std::cout << "Неправильная" << std::endl;
-        }
-        std::cout << "Количество сторон: 4" << std::endl;
-        std::cout << "Стороны: a=" << a << " b=" << b << " c=" << c << " d=" << d << std::endl;
-        std::cout << "Углы: A=" << A << " B=" << B << " C=" << C << " D=" << D << std::endl;
+    Rectangl() {
+        a = 10; c = 10; d = 20;
+        A = 90; B = 90; C = 90; D = 90;
+        name = "Прямоугольник:";
     }
     bool check() override {
-        return a == c && b == D && A == 90 && B == 90 && C == 90 && D == 90;
+        return a == c && b == d && A == 90 && B == 90 && C == 90 && D == 90;
     };
 };
 
 class Square : public Rectangl {
 public:
-    Square(int a) : Rectangl(a, a) {}
-
-    void print_info(Quadrilateral* shape) override {
-
-        if (check()) {
-            std::cout << "Правильная" << std::endl;
-        }
-        else {
-            std::cout << "Неправильная" << std::endl;
-        }
-        std::cout << "Количество сторон: 4" << std::endl;
-        std::cout << "Стороны: a=" << a << " b=" << b << " c=" << c << " d=" << d << std::endl;
-        std::cout << "Углы: A=" << A << " B=" << B << " C=" << C << " D=" << D << std::endl;
+    Square() {
+        a = 20; c = 20;
+        name = "Квадрат:";
     }
     bool check() override {
         return a == c && b == c && d == c && A == 90 && B == 90 && C == 90 && D == 90 ;
     };
 };
 
-
 class Rhomb : public Parallelogram {
 public:
-    Rhomb(int a, int A, int B) : Parallelogram(a, a, A, B) {}
-
-    void print_info(Quadrilateral* shape) override {        
-        if (check()) {
-            std::cout << "Правильная" << std::endl;
-        }
-        else {
-            std::cout << "Неправильная" << std::endl;
-        }
-        std::cout << "Количество сторон: 4" << std::endl;
-        std::cout << "Стороны: a=" << a << " b=" << b << " c=" << c << " d=" << d << std::endl;
-        std::cout << "Углы: A=" << A << " B=" << B << " C=" << C << " D=" << D << std::endl;
+    Rhomb() {
+        a = 30; b = 30; c = 30; d = 30;
+        name = "Ромб:";
     }
     bool check() override {
         return a == c && b == c && d == c && d == a && A == C && B == D;
     };
 };
-
-//void print_info(Triangle* shape) {
-//    std::cout << "Стороны: a=" << shape->get_a() << " b=" << shape->get_b() << " c=" << shape->get_c() << std::endl;
-//
-//    std::cout << "Углы: A=" << shape->get_A() << " B=" << shape->get_B() << " C=" << shape->get_C() << std::endl;
-//}
 
 
 int main() {
@@ -267,59 +196,48 @@ int main() {
 
     std::cout << std::endl;
 
-    Triangle triangle(10, 20, 30, 50, 60, 70);
-    std::cout << "Треугольник:" << std::endl;
+    Triangle triangle;   
     triangle.print_info(&triangle);
 
     std::cout << std::endl;
 
-    RightTriangle rightTriangle(10, 20, 30, 50, 60);
-    std::cout << "Прямоугольный треугольник:" << std::endl;
+    RightTriangle rightTriangle;   
     rightTriangle.print_info(&rightTriangle);
 
     std::cout << std::endl;
 
-    IsoscelesTriangle isoscelesTriangle(10, 20, 50, 60);
-    std::cout << "Равнобедренный треугольник:" << std::endl;
+    IsoscelesTriangle isoscelesTriangle;
     isoscelesTriangle.print_info(&isoscelesTriangle);
 
     std::cout << std::endl;
 
-    EquilateralTriangle equilateralTriangle(10);
-    std::cout << "Равносторонний треугольник:" << std::endl;
+    EquilateralTriangle equilateralTriangle;    
     equilateralTriangle.print_info(&equilateralTriangle);
 
     std::cout << std::endl;
 
-    Quadrilateral quadrilateral(10, 20, 30, 40, 50, 60, 70, 80);  
-    std::cout << "Четырехугольник:" << std::endl;
+    Quadrilateral quadrilateral;     
     quadrilateral.print_info(&quadrilateral);
 
     std::cout << std::endl;
 
-    Rectangl rectangl(10, 20); 
-    std::cout << "Прямоугольник:" << std::endl;
+    Rectangl rectangl;    
     rectangl.print_info(&rectangl);
 
     std::cout << std::endl;
 
-    Parallelogram parallelogram(20, 30, 30, 40); 
-    std::cout << "Параллелограмм:" << std::endl;
+    Parallelogram parallelogram;
     parallelogram.print_info(&parallelogram);
 
     std::cout << std::endl;
 
-    Square squre(20);  
-    std::cout << "Квадрат:" << std::endl;
+    Square squre;    
     squre.print_info(&squre);
 
     std::cout << std::endl;
 
-    Rhomb rhomb(30, 40, 30); 
-    std::cout << "Ромб:" << std::endl;
-    rhomb.print_info(&rhomb);
-
-    
+    Rhomb rhomb;    
+    rhomb.print_info(&rhomb);    
 
     return 0;
 }
