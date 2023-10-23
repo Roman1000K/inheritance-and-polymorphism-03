@@ -36,7 +36,6 @@ protected:
 public:
     Triangle() :a(10), b(20), c(30), A(50), B(60), C(70), name("Треугольник") {}
 
-    std::string get_name() { return name; }
     int get_a() { return a; }
     int get_b() { return b; }
     int get_c() { return c; }
@@ -107,7 +106,6 @@ protected:
 public:
     Quadrilateral() : a(10), b(20), c(30), d(40), A(50), B(60), C(70), D(80), name("Четырехугольник:") {}
 
-    std::string get_name() { return name; }
     int get_a() { return a; }
     int get_b() { return b; }
     int get_c() { return c; }
